@@ -14,7 +14,7 @@ There are two scenarios available:
 
 A custom init-container image is provided to configure the mirroring and allowing the broker-pairing in every AMQ cluster:
 
-    Broker-0 in DC1 will mirror to Broker-0 in DC2, broker-1 in DC1 will mirror to Broker-1 in DC2, and so on ... Therefore, the cluster size must be the same in both AMQ clusters.
+> Broker-0 in DC1 will mirror to Broker-0 in DC2, broker-1 in DC1 will mirror to Broker-1 in DC2, and so on ... Therefore, the cluster size must be the same in both AMQ clusters.
 
 ## Pre-requisites
 
