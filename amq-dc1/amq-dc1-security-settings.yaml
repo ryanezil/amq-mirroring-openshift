@@ -1,0 +1,142 @@
+apiVersion: broker.amq.io/v1beta1
+kind: ActiveMQArtemisSecurity
+metadata:
+  labels:
+    datacenter: dc1
+  name: amq-dc1
+spec:
+  loginModules:
+    propertiesLoginModules:
+      - name: "broker-prop-module"
+      # Passwords are in secret with name 'security-properties-broker-prop-module'
+        users:
+          # The main 'admin' user
+          - name: "amq-demo-user"
+            roles:
+              - "admin"
+          # The rest of the users
+          - name: "user-dev"
+            roles:
+              - "dev"
+          # Web Console users
+          - name: "consoleadmin"
+            roles:
+              - "consoleadmin"
+          - name: "consoleview"
+            roles:
+              - "view"
+  securityDomains:
+    brokerDomain:
+      name: "activemq"
+      loginModules:
+        - name: "broker-prop-module"
+          flag: "sufficient"
+          debug: true
+    consoleDomain:
+      name: "console"
+      loginModules:
+        - name: "broker-prop-module"
+          flag: "sufficient"
+          debug: true
+  securitySettings:
+    broker:
+      - match: "#"
+        permissions:
+          # Send a message to matching addresses
+          - operationType: "send"
+            roles:
+              - "admin"
+              - "dev"
+          # Consume a message from a queue bound to matching addresses
+          - operationType: "consume"
+            roles:
+              - "admin"
+              - "dev"
+          # Browse a queue bound to the matching address
+          - operationType: "browse"
+            roles:
+              - "admin"
+              - "dev"
+          # Create addresses
+          - operationType: "createAddress"
+            roles:
+              - "admin"
+              - "dev"
+          # Create a non-durable queue under matching addresses
+          - operationType: "createNonDurableQueue"
+            roles:
+              - "admin"
+              - "dev"
+          # Create a durable queue under matching addresses
+          - operationType: "createDurableQueue"
+            roles:
+              - "admin"
+              - "dev"
+          # Delete addresses
+          - operationType: "deleteAddress"
+            roles:
+              - "admin"
+              - "dev"
+          # Delete a non-durable queue under matching addresses
+          - operationType: "deleteNonDurableQueue"
+            roles:
+              - "admin"
+              - "dev"
+          # Delete a durable queue under matching addresses
+          - operationType: "deleteDurableQueue"
+            roles:
+              - "admin"
+              - "dev"
+          # Invoke management operations by sending management messages to the management address
+          - operationType: "manage"
+            roles:
+              - "admin"
+
+##########################
+    # Web console
+    management:
+      hawtioRoles:
+      - admin
+      - consoleadmin
+      - view
+      authorisation:
+        allowedList:
+        - domain: "hawtio"
+        roleAccess:
+        - domain: org.apache.activemq.artemis
+          accessList:
+          - method: "list*"
+            roles:
+            - admin
+            - consoleadmin
+            - view
+          - method: "get*"
+            roles:
+            - admin
+            - consoleadmin
+            - view
+          - method: "is*"
+            roles:
+            - admin
+            - consoleadmin
+            - view
+          - method: "set*"
+            roles:
+            - admin
+            - consoleadmin
+          - method: "browse*"
+            roles:
+            - admin
+            - consoleadmin
+            - view
+          - method: "count*"
+            roles:
+            - admin
+            - consoleadmin
+            - view
+          - method: "*"
+            roles:
+            - admin
+            - consoleadmin
+
+

@@ -1,0 +1,70 @@
+apiVersion: broker.amq.io/v1beta1
+kind: ActiveMQArtemis
+metadata:
+  labels:
+    datacenter: dc1
+  name: amq-dc1
+spec:
+  acceptors:
+  - name: plain-amqp
+    port: 5672
+    protocols: amqp
+  - name: tls-amqp
+    enabledProtocols: TLSv1.2
+    expose: false
+    port: 5673
+    protocols: amqp
+    sslEnabled: true
+    sslProvider: JDK
+    # Secret is mounted on /etc/<secret-name>/
+    sslSecret: tls-amqp-secret
+
+  addressSettings:
+    addressSetting:
+    - match: '#'
+      autoCreateQueues: true
+      autoCreateAddresses: true
+      autoDeleteQueues: true
+      autoDeleteAddress: true
+      maxSizeBytes: 100Mb
+    - match: DLQ
+      maxSizeBytes: 20Mb
+    - match: ExpiryQueue
+      maxSizeBytes: 20Mb
+  console:
+    expose: true
+    sslEnabled: true
+    sslSecret: tls-console-secret
+  deploymentPlan:
+    clustered: true
+    extraMounts:
+      secrets:
+      - remote-cluster-truststore
+      - mirror-configuration
+    image: placeholder
+    initImage: >-
+      quay.io/ryanezil/amq-mirroring/amq-broker-init-rhel8-customized:0.0.0-ocp-7.10-38
+    livenessProbe:
+      initialDelaySeconds: 240
+      timeoutSeconds: 30
+    enableMetricsPlugin: true
+    messageMigration: true
+    persistenceEnabled: true
+    podSecurity: {}
+    readinessProbe:
+      timeoutSeconds: 30
+    requireLogin: true
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 128Mi
+    size: 1
+    storage:
+      size: 1Gi
+  upgrades:
+    enabled: true
+    minor: true
+  version: 7.10.2
