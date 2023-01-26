@@ -2,8 +2,8 @@ apiVersion: broker.amq.io/v1beta1
 kind: ActiveMQArtemisSecurity
 metadata:
   labels:
-    datacenter: dc2
-  name: amq-dc2
+    datacenter: dc1
+  name: amq-dc1
 spec:
   loginModules:
     propertiesLoginModules:

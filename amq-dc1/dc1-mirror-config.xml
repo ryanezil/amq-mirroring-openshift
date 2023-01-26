@@ -1,8 +1,7 @@
 <broker-connections>
- <!-- DC1 mirrors to DC2 -->
  <amqp-connection
    name="mirror"
-   uri="tcp://amq-dc2-tls-amqp-${ORDINAL_BROKER}-svc.dc2.svc.cluster.local:5673?clientFailureCheckPeriod=2000;connectionTTL=5000;sslEnabled=true;verifyHost=false;trustStorePath=/amq/extra/secrets/remote-cluster-truststore/client.ts;trustStorePassword=password"
+   uri="tcp://amq-dc0-tls-amqp-${ORDINAL_BROKER}-svc.dc0.svc.cluster.local:5673?clientFailureCheckPeriod=2000;connectionTTL=5000;sslEnabled=true;verifyHost=false;trustStorePath=/amq/extra/secrets/remote-cluster-truststore/client.ts;trustStorePassword=password"
    retry-interval="10000"
    reconnect-attempts="-1"
    auto-start="true"

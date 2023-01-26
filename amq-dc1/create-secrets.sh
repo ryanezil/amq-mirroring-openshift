@@ -8,6 +8,13 @@ oc create secret generic tls-console-secret \
 --from-literal=keyStorePassword=password \
 --from-literal=trustStorePassword=password
 
+# MQTT-TLS acceptor certificate
+oc create secret generic tls-mqtt-secret \
+--from-file=broker.ks=amq-dc1-keystore.ks \
+--from-file=client.ts=amq-dc1-keystore.ks \
+--from-literal=keyStorePassword=password \
+--from-literal=trustStorePassword=password
+
 # Web Console certificate
 oc create secret generic tls-amqp-secret \
 --from-file=broker.ks=amq-dc1-keystore.ks \
@@ -26,8 +33,8 @@ oc create secret generic security-properties-broker-prop-module \
 
 # Remote cluster trust-store
 oc create secret generic remote-cluster-truststore \
---from-file=broker.ks=../amq-dc2/amq-dc2-keystore.ks \
---from-file=client.ts=../amq-dc2/amq-dc2-keystore.ks \
+--from-file=broker.ks=../amq-dc0/amq-dc0-keystore.ks \
+--from-file=client.ts=../amq-dc0/amq-dc0-keystore.ks \
 --from-literal=keyStorePassword=password \
 --from-literal=trustStorePassword=password
 

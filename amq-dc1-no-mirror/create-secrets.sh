@@ -3,15 +3,22 @@ cd "$(dirname "$0")"
 
 # AMPQ-TLS acceptor certificate
 oc create secret generic tls-console-secret \
---from-file=broker.ks=amq-dc2-keystore.ks \
---from-file=client.ts=amq-dc2-keystore.ks \
+--from-file=broker.ks=amq-dc1-keystore.ks \
+--from-file=client.ts=amq-dc1-keystore.ks \
+--from-literal=keyStorePassword=password \
+--from-literal=trustStorePassword=password
+
+# MQTT-TLS acceptor certificate
+oc create secret generic tls-mqtt-secret \
+--from-file=broker.ks=amq-dc1-keystore.ks \
+--from-file=client.ts=amq-dc1-keystore.ks \
 --from-literal=keyStorePassword=password \
 --from-literal=trustStorePassword=password
 
 # Web Console certificate
 oc create secret generic tls-amqp-secret \
---from-file=broker.ks=amq-dc2-keystore.ks \
---from-file=client.ts=amq-dc2-keystore.ks \
+--from-file=broker.ks=amq-dc1-keystore.ks \
+--from-file=client.ts=amq-dc1-keystore.ks \
 --from-literal=keyStorePassword=password \
 --from-literal=trustStorePassword=password
 

@@ -2,10 +2,19 @@ apiVersion: broker.amq.io/v1beta1
 kind: ActiveMQArtemis
 metadata:
   labels:
-    datacenter: dc2
-  name: amq-dc2
+    datacenter: dc0
+  name: amq-dc0
 spec:
   acceptors:
+  - name: tls-mqtt
+    enabledProtocols: TLSv1.2
+    expose: true
+    port: 8883
+    protocols: mqtt
+    sslEnabled: true
+    sslProvider: JDK
+    # Secret is mounted on /etc/<secret-name>/
+    sslSecret: tls-mqtt-secret
   - name: plain-amqp
     port: 5672
     protocols: amqp
@@ -31,12 +40,22 @@ spec:
       maxSizeBytes: 20Mb
     - match: ExpiryQueue
       maxSizeBytes: 20Mb
+# SEE: https://github.com/apache/activemq-artemis/blob/47bcf5b73c69e3fa0f681a13801af87b534157f4/artemis-server/src/test/java/org/apache/activemq/artemis/core/config/impl/ConfigurationImplTest.java#L714
+# Mirror events are always stored on a local queue prefixed as "$ACTIVEMQARTEMIS_MIRROR" and then concatenated with the broker connection's configured name
+# In this case: $ACTIVEMQ_ARTEMIS_MIRROR_dc2
+  brokerProperties:
+#  - "clusterConfiguration.dc0-cluster-config.name=dc0-cluster-config"
+  - "clusterConfigurations.my-cluster.messageLoadBalancingType=OFF_WITH_REDISTRIBUTION"
   console:
     expose: true
     sslEnabled: true
     sslSecret: tls-console-secret
   deploymentPlan:
     clustered: true
+    extraMounts:
+      secrets:
+      - remote-cluster-truststore
+      - mirror-configuration
     image: placeholder
     initImage: >-
       quay.io/ryanezil/amq-mirroring/amq-broker-init-rhel8-customized:0.0.0-ocp-7.10-38
@@ -57,7 +76,7 @@ spec:
       requests:
         cpu: 200m
         memory: 128Mi
-    size: 1
+    size: 2
     storage:
       size: 1Gi
   upgrades:
