@@ -42,10 +42,10 @@ spec:
       maxSizeBytes: 20Mb
 # SEE: https://github.com/apache/activemq-artemis/blob/47bcf5b73c69e3fa0f681a13801af87b534157f4/artemis-server/src/test/java/org/apache/activemq/artemis/core/config/impl/ConfigurationImplTest.java#L714
 # Mirror events are always stored on a local queue prefixed as "$ACTIVEMQARTEMIS_MIRROR" and then concatenated with the broker connection's configured name
-# In this case: $ACTIVEMQ_ARTEMIS_MIRROR_dc2
+# In this case: $ACTIVEMQ_ARTEMIS_MIRROR_dc0
   brokerProperties:
 #  - "clusterConfiguration.dc0-cluster-config.name=dc0-cluster-config"
-  - "clusterConfigurations.my-cluster.messageLoadBalancingType=OFF_WITH_REDISTRIBUTION"
+#  - "clusterConfigurations.my-cluster.messageLoadBalancingType=OFF_WITH_REDISTRIBUTION"
   console:
     expose: true
     sslEnabled: true
@@ -71,8 +71,8 @@ spec:
     requireLogin: true
     resources:
       limits:
-        cpu: 500m
-        memory: 512Mi
+        cpu: 1000m
+        memory: 1024Mi
       requests:
         cpu: 200m
         memory: 128Mi

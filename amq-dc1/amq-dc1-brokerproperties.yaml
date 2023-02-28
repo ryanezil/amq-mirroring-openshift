@@ -42,10 +42,12 @@ spec:
       maxSizeBytes: 20Mb
 # SEE: https://github.com/apache/activemq-artemis/blob/47bcf5b73c69e3fa0f681a13801af87b534157f4/artemis-server/src/test/java/org/apache/activemq/artemis/core/config/impl/ConfigurationImplTest.java#L714
 # Mirror events are always stored on a local queue prefixed as "$ACTIVEMQARTEMIS_MIRROR" and then concatenated with the broker connection's configured name
-# In this case: $ACTIVEMQ_ARTEMIS_MIRROR_dc2
+# In this case: $ACTIVEMQ_ARTEMIS_MIRROR_dc1
   brokerProperties:
 #  - "clusterConfiguration.dc1-cluster-config.name=dc1-cluster-config"
-  - "clusterConfigurations.my-cluster.messageLoadBalancingType=OFF_WITH_REDISTRIBUTION"
+#  - "clusterConfigurations.my-cluster.messageLoadBalancingType=OFF_WITH_REDISTRIBUTION"
+# Set TLS-MQTTacceptor autostart to OFF: it can be started when the cluster is considered ACTIVE to accept connections
+#  - "acceptorConfigurations.tls-mqtt.params.autoStart=false"
   - "AMQPConnections.dc0.uri=tcp://amq-dc0-tls-amqp-${STATEFUL_SET_ORDINAL}-svc.dc0.svc.cluster.local:5673?clientFailureCheckPeriod=2000;connectionTTL=5000;sslEnabled=true;verifyHost=false;trustStorePath=/amq/extra/secrets/remote-cluster-truststore/client.ts;trustStorePassword=password"
   - "AMQPConnections.dc0.retryInterval=5000"
   - "AMQPConnections.dc0.reconnectAttempts=-1"
@@ -78,8 +80,8 @@ spec:
     requireLogin: true
     resources:
       limits:
-        cpu: 500m
-        memory: 512Mi
+        cpu: 1000m
+        memory: 1024Mi
       requests:
         cpu: 200m
         memory: 128Mi

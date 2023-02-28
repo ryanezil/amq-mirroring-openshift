@@ -42,7 +42,9 @@ spec:
       maxSizeBytes: 20Mb
   brokerProperties:
 #  - "clusterConfiguration.myname.name=myname"
-  - "clusterConfigurations.my-cluster.messageLoadBalancingType=OFF_WITH_REDISTRIBUTION"
+#  - "clusterConfigurations.my-cluster.messageLoadBalancingType=OFF_WITH_REDISTRIBUTION"
+# Set acceptor autostart to OFF: it can be started when the cluster is considered ACTIVE to accept connections
+#  - "acceptorConfigurations.tls-mqtt.params.autoStart=false"
   console:
     expose: true
     sslEnabled: true
@@ -62,8 +64,8 @@ spec:
     requireLogin: true
     resources:
       limits:
-        cpu: 500m
-        memory: 512Mi
+        cpu: 1000m
+        memory: 1024Mi
       requests:
         cpu: 200m
         memory: 128Mi
