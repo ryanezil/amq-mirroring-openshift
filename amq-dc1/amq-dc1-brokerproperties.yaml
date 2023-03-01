@@ -48,7 +48,7 @@ spec:
 #  - "clusterConfigurations.my-cluster.messageLoadBalancingType=OFF_WITH_REDISTRIBUTION"
 # Set TLS-MQTTacceptor autostart to OFF: it can be started when the cluster is considered ACTIVE to accept connections
 #  - "acceptorConfigurations.tls-mqtt.params.autoStart=false"
-  - "AMQPConnections.dc0.uri=tcp://amq-dc0-tls-amqp-${STATEFUL_SET_ORDINAL}-svc.dc0.svc.cluster.local:5673?clientFailureCheckPeriod=2000;connectionTTL=5000;sslEnabled=true;verifyHost=false;trustStorePath=/amq/extra/secrets/remote-cluster-truststore/client.ts;trustStorePassword=password"
+  - "AMQPConnections.dc0.uri=tcp://amq-dc0-tls-amqp-${STATEFUL_SET_ORDINAL}-svc.dc0.svc.cluster.local:5673?clientFailureCheckPeriod=30000&connectionTTL=60000&sslEnabled=true&verifyHost=false&trustStorePath=/amq/extra/secrets/remote-cluster-truststore/client.ts&trustStorePassword=password"
   - "AMQPConnections.dc0.retryInterval=5000"
   - "AMQPConnections.dc0.reconnectAttempts=-1"
   - "AMQPConnections.dc0.user=amq-demo-user"
