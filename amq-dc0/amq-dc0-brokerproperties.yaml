@@ -46,7 +46,10 @@ spec:
   brokerProperties:
 #  - "clusterConfiguration.dc0-cluster-config.name=dc0-cluster-config"
 #  - "clusterConfigurations.my-cluster.messageLoadBalancingType=OFF_WITH_REDISTRIBUTION"
-  - "AMQPConnections.dc1.uri=tcp://amq-dc1-tls-amqp-${STATEFUL_SET_ORDINAL}-svc.dc1.svc.cluster.local:5673?clientFailureCheckPeriod=30000&connectionTTL=60000&sslEnabled=true&verifyHost=false&trustStorePath=/amq/extra/secrets/remote-cluster-truststore/client.ts&trustStorePassword=password"
+#  - "AMQPConnections.dc1.uri=tcp://amq-dc1-tls-amqp-${STATEFUL_SET_ORDINAL}-svc.dc1.svc.cluster.local:5673?clientFailureCheckPeriod=30000&connectionTTL=60000&sslEnabled=true&verifyHost=false&trustStorePath=/amq/extra/secrets/remote-cluster-truststore/client.ts&trustStorePassword=password"
+  - "AMQPConnections.dc1.uri=tcp://amq-dc1-tls-amqp-${STATEFUL_SET_ORDINAL}-svc.dc1.svc.cluster.local:5673?clientFailureCheckPeriod=30000&connectionTTL=60000&sslEnabled=true&verifyHost=false&trustStorePath=/amq/extra/secrets/remote-cluster-truststore/client.ts"
+# The truststore password is "password". This configuration line MUST BE placed AFTER the mirror URI definition.
+  - "AMQPConnections.dc1.transportConfigurations.dc1.params.trustStorePassword=ENC(3a34fd21b82bf2a822fa49a8d8fa115d)"
   - "AMQPConnections.dc1.retryInterval=5000"
   - "AMQPConnections.dc1.reconnectAttempts=-1"
   - "AMQPConnections.dc1.user=amq-demo-user"
