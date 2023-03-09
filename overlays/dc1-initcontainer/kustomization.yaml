@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: dc1
+
+bases:
+- ../../base
+
+components:
+  - ../../components/dc1-secrets
+  - ../../components/dc1-initcontainer-secrets
+  - ../../components/dc1-truststore-secret
+
+commonLabels:
+  datacenter: dc1
+
+patchesStrategicMerge:
+- amq.yaml
+
+
+
+
+

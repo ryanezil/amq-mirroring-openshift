@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+generatorOptions:
+  disableNameSuffixHash: true
+  labels:
+    app: amq-mirroring-demo
+#  annotations:
+#    note: generated
+
+secretGenerator:
+
+# XML Mirror configuration: connects to the remote cluster. The content is
+# injected inside 'broker.xml'
+# The secret name is referenced in the init-container script 'post-config.sh'
+# DO NOT CHANGE the name
+- name: mirror-configuration
+  files:
+  - mirror-config.xml=./dc0-mirror-config.xml
