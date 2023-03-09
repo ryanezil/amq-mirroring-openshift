@@ -1,0 +1,49 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+generatorOptions:
+  disableNameSuffixHash: true
+  labels:
+    app: amq-mirroring-demo
+#  annotations:
+#    note: generated
+
+secretGenerator:
+
+# AMPQ-TLS acceptor certificate
+- name: tls-amqp-secret
+  files:
+  - broker.ks=./keystore.ks
+  - client.ts=./keystore.ks
+  literals:
+  - keyStorePassword=password
+  - trustStorePassword=password
+
+# MQTT-TLS acceptor certificate
+- name: tls-mqtt-secret
+  files:
+  - broker.ks=./keystore.ks
+  - client.ts=./keystore.ks
+  literals:
+  - keyStorePassword=password
+  - trustStorePassword=password
+
+# Web Console certificate
+- name: tls-console-secret
+  files:
+  - broker.ks=./keystore.ks
+  - client.ts=./keystore.ks
+  literals:
+  - keyStorePassword=password
+  - trustStorePassword=password
+
+# Secret containing user's passwords
+# Naming convention is `security-properties-<module name>`
+- name: security-properties-broker-prop-module
+  literals:
+  - amq-demo-user=password
+  - user-dev=user-dev-pass
+  - consoleadmin=consoleadmin-pass
+  - consoleview=consoleview-pass
+
+

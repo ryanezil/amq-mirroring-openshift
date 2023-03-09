@@ -1,0 +1,34 @@
+apiVersion: broker.amq.io/v1beta1
+kind: ActiveMQArtemis
+metadata:
+  name: amq
+spec:
+  brokerProperties:
+### CLUSTER CONFIGURATION
+#  - "clusterConfiguration.dc0-cluster-config.name=dc0-cluster-config"
+#  - "clusterConfigurations.dc0-cluster-config.messageLoadBalancingType=OFF_WITH_REDISTRIBUTION"   << This does not work
+#  - "clusterConfigurations.my-cluster.messageLoadBalancingType=OFF_WITH_REDISTRIBUTION" << This works: name MUST BE 'my-cluster'. Is it a BUG?
+
+### MIRRORING CONFIGURATION
+# AMQPConnections test example - see: https://github.com/apache/activemq-artemis/blob/47bcf5b73c69e3fa0f681a13801af87b534157f4/artemis-server/src/test/java/org/apache/activemq/artemis/core/config/impl/ConfigurationImplTest.java#L714
+# Mirror events are always stored on a local queue prefixed as "$ACTIVEMQARTEMIS_MIRROR" and then concatenated with the broker connection's configured name
+# In this case it is: $ACTIVEMQ_ARTEMIS_MIRROR_dc1
+#  - "AMQPConnections.dc1.uri=tcp://amq-tls-amqp-${STATEFUL_SET_ORDINAL}-svc.dc1.svc.cluster.local:5673?clientFailureCheckPeriod=30000&connectionTTL=60000&sslEnabled=true&verifyHost=false&trustStorePath=/amq/extra/secrets/remote-cluster-truststore/client.ts&trustStorePassword=password"
+  - "AMQPConnections.dc1.uri=tcp://amq-tls-amqp-${STATEFUL_SET_ORDINAL}-svc.dc1.svc.cluster.local:5673?clientFailureCheckPeriod=30000&connectionTTL=60000&sslEnabled=true&verifyHost=false&trustStorePath=/amq/extra/secrets/remote-cluster-truststore/client.ts"
+# The truststore password is "password". This configuration line MUST BE placed AFTER the mirror URI definition.
+  - "AMQPConnections.dc1.transportConfigurations.dc1.params.trustStorePassword=ENC(3a34fd21b82bf2a822fa49a8d8fa115d)"
+  - "AMQPConnections.dc1.retryInterval=5000"
+  - "AMQPConnections.dc1.reconnectAttempts=-1"
+  - "AMQPConnections.dc1.user=amq-demo-user"
+  - "AMQPConnections.dc1.password=password"
+  - "AMQPConnections.dc1.autoStart=true"
+  - "AMQPConnections.dc1.connectionElements.mirror.type=MIRROR"
+  - "AMQPConnections.dc1.connectionElements.mirror.messageAcknowledgements=true"
+  - "AMQPConnections.dc1.connectionElements.mirror.queueCreation=true"
+  - "AMQPConnections.dc1.connectionElements.mirror.queueRemoval=true"
+
+# Secret containing the remote cluster truststore referenced in configuration
+  deploymentPlan:
+    extraMounts:
+      secrets:
+      - remote-cluster-truststore

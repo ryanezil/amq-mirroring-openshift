@@ -1,0 +1,20 @@
+apiVersion: broker.amq.io/v1beta1
+kind: ActiveMQArtemis
+metadata:
+  name: amq
+spec:
+  brokerProperties:
+### CLUSTER CONFIGURATION
+#  - "clusterConfiguration.dc0-cluster-config.name=dc0-cluster-config"
+#  - "clusterConfigurations.dc0-cluster-config.messageLoadBalancingType=OFF_WITH_REDISTRIBUTION"   << This does not work
+#  - "clusterConfigurations.my-cluster.messageLoadBalancingType=OFF_WITH_REDISTRIBUTION" << This works: name MUST BE 'my-cluster'. Is it a BUG?
+
+  deploymentPlan:
+    initImage: >-
+      quay.io/ryanezil/amq-mirroring/amq-broker-init-rhel8-customized:0.0.0-ocp-7.10-38
+    extraMounts:
+      secrets:
+# Secret containing the remote cluster truststore referenced in XML configuration file
+      - remote-cluster-truststore
+# Secret containing the XML file related to the mirroring configuration
+      - mirror-configuration

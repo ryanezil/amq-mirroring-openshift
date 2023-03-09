@@ -1,0 +1,13 @@
+<broker-connections>
+ <!-- DC0 mirrors to DC1 -->
+ <amqp-connection
+   name="mirror"
+   uri="tcp://amq-tls-amqp-${ORDINAL_BROKER}-svc.dc1.svc.cluster.local:5673?clientFailureCheckPeriod=30000;connectionTTL=60000;sslEnabled=true;verifyHost=false;trustStorePath=/amq/extra/secrets/remote-cluster-truststore/client.ts;trustStorePassword=password"
+   retry-interval="10000"
+   reconnect-attempts="-1"
+   auto-start="true"
+   user="amq-demo-user"
+   password="password" >
+  <mirror queue-removal="true" message-acknowledgements="true" queue-creation="true" durable="false" />
+ </amqp-connection>
+</broker-connections>
